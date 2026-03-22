@@ -11,6 +11,13 @@ export class PulseCodeActionProvider implements vscode.CodeActionProvider {
     context: vscode.CodeActionContext,
     token: vscode.CancellationToken
   ): vscode.CodeAction[] {
+    // Skip non-source files
+    const langId = document.languageId;
+    const sourceLanguages = new Set(['typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'python', 'java', 'go', 'rust', 'c', 'cpp', 'csharp', 'ruby', 'php', 'swift', 'kotlin']);
+    if (!sourceLanguages.has(langId)) {
+      return [];
+    }
+
     const action = new vscode.CodeAction(
       ASK_TEAM_ACTION_TITLE,
       vscode.CodeActionKind.Empty

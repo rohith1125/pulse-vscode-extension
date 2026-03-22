@@ -52,6 +52,7 @@ export class PulseCodeLensProvider implements vscode.CodeLensProvider {
       title: buildCodeLensTitle(busFactor),
       command: 'pulse.askTeam',
       tooltip: buildCodeLensTooltip(busFactor),
+      arguments: [document.uri.fsPath, firstSymbol.name, firstSymbol.range.start.line],
     };
 
     return [lens];
