@@ -29,6 +29,10 @@ export class RepoScanner {
     private knowledgeGraph: KnowledgeGraph
   ) {}
 
+  get scanning(): boolean {
+    return this.isScanning;
+  }
+
   /**
    * Runs a full repository scan with progress reporting.
    */
@@ -47,7 +51,8 @@ export class RepoScanner {
     }
 
     if (!(await isGitRepo(repoRoot))) {
-      throw new Error('Workspace is not a git repository');
+      logger.warn('Workspace is not a git repository — skipping scan');
+      return;
     }
 
     addPulseDbToGitignore(repoRoot);
@@ -120,7 +125,7 @@ export class RepoScanner {
 
       // 7. Update metadata
       const totalCommits = this.db.getAllFiles().length; // approximate
-      this.db.updateScanComplete(totalCommits, trackedFiles.length);
+      this.db.updateScanMetadata(totalCommits, trackedFiles.length);
 
       logger.info(`Scan complete. ${trackedFiles.length} files processed.`);
     } catch (err) {
@@ -162,7 +167,7 @@ export class RepoScanner {
           commit.authorName,
           commit.committedAt
         );
-        this.db.insertCommit({
+        this.db.upsertCommit({
           hash: commit.hash,
           fileId,
           contributorId,
@@ -188,7 +193,7 @@ export class RepoScanner {
           committedAt: seg.committedAt,
         });
       }
-      this.db.replaceBlameSegments(fileId, mappedSegments);
+      this.db.upsertBlameSegments(fileId, mappedSegments);
 
     } catch (err) {
       logger.warn(`Failed to scan file ${relPath}: ${err}`);
@@ -342,7 +347,7 @@ export class RepoScanner {
         }
       }
 
-      this.db.updateScanComplete(0, changedFiles.length);
+      this.db.updateScanMetadata(0, changedFiles.length);
     } finally {
       this.isScanning = false;
     }
