@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { KnowledgeGraph, ExpertiseResult, BusFactorResult, HoverContext } from '../core/knowledgeGraph';
 import { PulseSettings } from '../config/settings';
 import { resolveSymbolAtPosition } from '../utils/symbolResolver';
-import { toRelativePath } from '../utils/fileUtils';
+import { toRelativePath, isBinaryFile } from '../utils/fileUtils';
 import { logger } from '../utils/logger';
 
 export class PulseHoverProvider implements vscode.HoverProvider {
@@ -25,6 +25,11 @@ export class PulseHoverProvider implements vscode.HoverProvider {
     if (!debounced || token.isCancellationRequested) { return null; }
 
     const filePath = toRelativePath(document.uri.fsPath);
+
+    // Early return for binary files
+    if (isBinaryFile(filePath)) {
+      return null;
+    }
 
     try {
       const symbolName = await resolveSymbolAtPosition(document, position);
@@ -109,10 +114,7 @@ export class PulseHoverProvider implements vscode.HoverProvider {
 
     // Decision notes
     if (ctx.decisionNotes.length > 0) {
-      const note = ctx.decisionNotes[0];
-      const author = note.authorLogin ? `@${note.authorLogin}` : 'unknown';
-      const prLink = note.prUrl ? `[PR #${note.prNumber}](${note.prUrl})` : `PR #${note.prNumber}`;
-      md.appendMarkdown(`💬 ${author} in ${prLink}: *${note.excerpt}*\n\n`);
+      md.appendMarkdown(`💬 ${ctx.decisionNotes[0]}\n\n`);
     }
 
     // Action links

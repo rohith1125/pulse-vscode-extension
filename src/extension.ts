@@ -48,7 +48,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     // Providers
     const hoverProvider = new PulseHoverProvider(knowledgeGraph, settings);
     const codeLensProvider = new PulseCodeLensProvider(knowledgeGraph, settings);
-    const codeActionProvider = new PulseCodeActionProvider();
+    const codeActionProvider = new PulseCodeActionProvider(knowledgeGraph);
 
     // Register language providers
     context.subscriptions.push(
@@ -134,14 +134,26 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     if (shouldAutoScan) {
       logger.info('Auto-scan triggered on activation');
       // Small delay to let VS Code finish loading
-      setTimeout(() => scanner.scanInBackground(getSettings()), 2000);
+      setTimeout(() => {
+        scanner.scan(getSettings()).then(() => {
+          codeLensProvider.refresh();
+          statusBar.refresh();
+        }).catch(err => {
+          logger.error('Background scan failed', err);
+        });
+      }, 2000);
     }
 
     // Auto-scan interval (if configured)
     if (settings.autoScanIntervalMinutes > 0) {
       const intervalMs = settings.autoScanIntervalMinutes * 60 * 1000;
       const autoScanInterval = setInterval(() => {
-        scanner.scanInBackground(getSettings());
+        scanner.scan(getSettings()).then(() => {
+          codeLensProvider.refresh();
+          statusBar.refresh();
+        }).catch(err => {
+          logger.error('Background scan failed', err);
+        });
       }, intervalMs);
       context.subscriptions.push({ dispose: () => clearInterval(autoScanInterval) });
     }

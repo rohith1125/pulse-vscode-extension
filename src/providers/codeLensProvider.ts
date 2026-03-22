@@ -100,7 +100,7 @@ function buildCodeLensTitle(bf: BusFactorResult): string {
   if (bf.riskLevel === 'warning') {
     const names = bf.topExperts.slice(0, 2).map(e => e.contributor.name);
     return names.length > 1
-      ? `👥 ${bf.busFactorCount} experts · ${names[0]} + ${bf.busFactorCount - 1} more`
+      ? `👥 ${bf.busFactorCount} experts · ${names[0]} + ${bf.topExperts.length - 1} more`
       : `👥 ${bf.busFactorCount} experts`;
   }
   return `✓ ${bf.busFactorCount} experts`;
