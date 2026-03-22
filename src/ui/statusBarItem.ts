@@ -36,12 +36,12 @@ export class PulseStatusBarItem {
 
       if (criticalCount > 0) {
         this.item.text = `$(warning) Pulse: ${criticalCount} risk${criticalCount > 1 ? 's' : ''}`;
-        this.item.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
+        this.item.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
         this.item.tooltip = `Pulse: ${criticalCount} critical bus factor risks. Click to view.`;
         this.item.command = 'pulse.openDashboard';
       } else if (warningCount > 0) {
         this.item.text = `$(info) Pulse: ${warningCount} warning${warningCount > 1 ? 's' : ''}`;
-        this.item.backgroundColor = undefined;
+        this.item.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
         this.item.tooltip = `Pulse: ${warningCount} bus factor warnings. Click to view.`;
         this.item.command = 'pulse.openDashboard';
       } else {

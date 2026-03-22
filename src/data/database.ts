@@ -423,6 +423,13 @@ export class PulseDatabase {
     });
   }
 
+  getLastReviewDateByFileAndContributor(fileId: number, contributorId: number): number | null {
+    const row = this.db.prepare(
+      'SELECT MAX(reviewed_at) as last_review FROM pr_reviews WHERE file_id = ? AND contributor_id = ?'
+    ).get(fileId, contributorId) as { last_review: number | null };
+    return row.last_review;
+  }
+
   getReviewCountByFileAndContributor(fileId: number, contributorId: number): number {
     const row = this.db.prepare(
       'SELECT COUNT(*) as count FROM pr_reviews WHERE file_id = ? AND contributor_id = ?'

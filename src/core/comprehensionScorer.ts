@@ -41,7 +41,8 @@ export function computeFileExpertise(
 
     // lastEngagement = max of last commit OR last review
     const lastCommit = db.getLastCommitDateByFileAndContributor(fileId, contributorId);
-    const lastEngagement = lastCommit;
+    const lastReview = db.getLastReviewDateByFileAndContributor(fileId, contributorId);
+    const lastEngagement = Math.max(lastCommit || 0, lastReview || 0) || null;
 
     return { contributorId, commitCount, blameLines, reviewCount, lastEngagement };
   });
