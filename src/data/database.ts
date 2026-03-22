@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS pr_comments (
   pr_url          TEXT,
   author_login    TEXT,
   body            TEXT NOT NULL,
-  comment_path    TEXT,
+  path            TEXT,
   line            INTEGER,
   created_at      INTEGER NOT NULL
 );
@@ -322,7 +322,7 @@ export class PulseDatabase {
 
   // ─── Commits ───────────────────────────────────────────────────────────────
 
-  insertCommit(data: {
+  upsertCommit(data: {
     hash: string; fileId: number; contributorId: number;
     committedAt: number; message?: string; linesAdded?: number; linesRemoved?: number;
   }): void {
@@ -356,7 +356,7 @@ export class PulseDatabase {
 
   // ─── Blame Segments ────────────────────────────────────────────────────────
 
-  replaceBlameSegments(fileId: number, segments: Array<{
+  upsertBlameSegments(fileId: number, segments: Array<{
     contributorId: number; lineStart: number; lineEnd: number;
     commitHash: string; committedAt: number;
   }>): void {
@@ -462,7 +462,7 @@ export class PulseDatabase {
   }): void {
     this.db.prepare(`
       INSERT OR IGNORE INTO pr_comments
-        (file_id, pr_number, pr_title, pr_url, author_login, body, comment_path, line, created_at)
+        (file_id, pr_number, pr_title, pr_url, author_login, body, path, line, created_at)
       VALUES (@fileId, @prNumber, @prTitle, @prUrl, @authorLogin, @body, @commentPath, @line, @createdAt)
     `).run({
       fileId: data.fileId,
@@ -487,7 +487,7 @@ export class PulseDatabase {
     return rows.map(r => ({
       id: r.id, fileId: r.file_id, prNumber: r.pr_number,
       prTitle: r.pr_title, prUrl: r.pr_url, authorLogin: r.author_login,
-      body: r.body, commentPath: r.comment_path, line: r.line, createdAt: r.created_at,
+      body: r.body, commentPath: r.path, line: r.line, createdAt: r.created_at,
     }));
   }
 
@@ -528,6 +528,10 @@ export class PulseDatabase {
       updatedAt: r.updated_at,
       contributorName: r.contributor_name, contributorEmail: r.contributor_email,
     }));
+  }
+
+  getTopExpertsForFile(fileId: number, limit: number = 3): any[] {
+    return this.getExpertiseScoresForFile(fileId).slice(0, limit);
   }
 
   getContributorIdsForFile(fileId: number): number[] {
@@ -606,7 +610,7 @@ export class PulseDatabase {
     this.db.prepare('UPDATE scan_metadata SET status = ? WHERE id = 1').run(status);
   }
 
-  updateScanComplete(commitCount: number, fileCount: number): void {
+  updateScanMetadata(commitCount: number, fileCount: number): void {
     const now = Math.floor(Date.now() / 1000);
     this.db.prepare(`
       UPDATE scan_metadata SET last_scan = ?, commit_count = ?, file_count = ?, status = 'complete' WHERE id = 1
