@@ -1,0 +1,60 @@
+abc1234567890abcdef1234567890abcdef12345678 1 1 5
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1704067200
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1704067200
+committer-tz +0000
+summary feat: add authentication
+filename src/auth/login.ts
+	export function login(user: string) {
+abc1234567890abcdef1234567890abcdef12345678 2 2
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1704067200
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1704067200
+committer-tz +0000
+summary feat: add authentication
+filename src/auth/login.ts
+	  return doLogin(user);
+abc1234567890abcdef1234567890abcdef12345678 3 3
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1704067200
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1704067200
+committer-tz +0000
+summary feat: add authentication
+filename src/auth/login.ts
+	}
+def2345678901234567890abcdef1234567890abcd 4 4 2
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1703980800
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1703980800
+committer-tz +0000
+summary fix: resolve login bug
+filename src/auth/login.ts
+	export function logout() {
+def2345678901234567890abcdef1234567890abcd 5 5
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1703980800
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1703980800
+committer-tz +0000
+summary fix: resolve login bug
+filename src/auth/login.ts
+	  clearSession();
