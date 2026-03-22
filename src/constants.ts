@@ -1,0 +1,16 @@
+export const EXTENSION_ID = 'pulse-team-knowledge';
+export const EXTENSION_NAME = 'Pulse';
+export const DB_FILENAME = 'pulse.db';
+export const OUTPUT_CHANNEL_NAME = 'Pulse';
+export const MAX_EXPERTS_IN_HOVER = 3;
+export const MAX_DECISION_NOTES = 3;
+export const HOVER_CONTEXT_LINES = 10; // lines around cursor to search for PR comments
+export const SCAN_BATCH_SIZE = 20;     // files per batch during scan
+export const MAX_FILES_PER_SCAN = 5000;
+export const GIT_BLAME_TIMEOUT_MS = 5000;
+export const INCREMENTAL_SCAN_DEBOUNCE_MS = 5000;
+export const GITHUB_RATE_LIMIT_PER_HOUR = 4800; // buffer below 5000
+export const SCORE_WEIGHT_COMMITS = 0.25;
+export const SCORE_WEIGHT_BLAME = 0.35;
+export const SCORE_WEIGHT_REVIEWS = 0.25;
+export const SCORE_WEIGHT_RECENCY = 0.15;
