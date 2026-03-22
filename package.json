@@ -1,0 +1,71 @@
+{
+  "name": "pulse-team-knowledge",
+  "displayName": "Pulse — Team Knowledge",
+  "description": "See who understands your codebase. Bus factor alerts, best person to ask, decision archaeology — inline in VS Code.",
+  "version": "0.1.0",
+  "publisher": "pulse",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "SCM Providers"],
+  "keywords": ["git", "team", "knowledge", "bus factor", "collaboration"],
+  "activationEvents": ["workspaceContains:.git"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "pulse.scan", "title": "Pulse: Scan Repository" },
+      { "command": "pulse.openDashboard", "title": "Pulse: Open Knowledge Dashboard" },
+      { "command": "pulse.askTeam", "title": "Pulse: Ask Team About This" },
+      { "command": "pulse.connectGitHub", "title": "Pulse: Connect GitHub Account" },
+      { "command": "pulse.clearCache", "title": "Pulse: Clear Cache & Rescan" }
+    ],
+    "configuration": {
+      "title": "Pulse",
+      "properties": {
+        "pulse.enabled": { "type": "boolean", "default": true, "description": "Enable Pulse extension" },
+        "pulse.codeLensEnabled": { "type": "boolean", "default": true, "description": "Show bus factor CodeLens above functions" },
+        "pulse.hoverEnabled": { "type": "boolean", "default": true, "description": "Show knowledge hover cards" },
+        "pulse.busFactorWarningThreshold": { "type": "number", "default": 2, "description": "Show warning when experts ≤ this value" },
+        "pulse.busFactorCriticalThreshold": { "type": "number", "default": 1, "description": "Show critical when experts ≤ this value" },
+        "pulse.decayHalfLifeMonths": { "type": "number", "default": 6, "description": "Months until expertise score halves from inactivity" },
+        "pulse.autoScanIntervalMinutes": { "type": "number", "default": 30, "description": "Auto-scan interval in minutes (0 = disabled)" },
+        "pulse.excludePatterns": { "type": "array", "items": { "type": "string" }, "default": ["**/node_modules/**", "**/dist/**", "**/.git/**", "**/out/**"], "description": "File patterns to exclude from scanning" },
+        "pulse.githubEnabled": { "type": "boolean", "default": false, "description": "Enable GitHub API integration for PR context (opt-in)" },
+        "pulse.maxFileSizeKb": { "type": "number", "default": 500, "description": "Skip files larger than this size in KB" },
+        "pulse.hoverDelayMs": { "type": "number", "default": 300, "description": "Hover card debounce delay in milliseconds" }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        { "command": "pulse.askTeam", "when": "editorTextFocus", "group": "pulse@1" }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "pretest": "tsc -p tsconfig.test.json"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.0",
+    "@octokit/graphql": "^8.0.0",
+    "better-sqlite3": "^9.4.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "@types/sinon": "^17.0.3",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.56.0",
+    "mocha": "^10.3.0",
+    "sinon": "^17.0.1",
+    "typescript": "^5.3.3"
+  }
+}
