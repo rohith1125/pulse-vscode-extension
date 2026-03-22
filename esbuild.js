@@ -13,18 +13,8 @@ async function main() {
     sourcesContent: false,
     platform: 'node',
     outfile: 'dist/extension.js',
-    external: ['vscode'],
+    external: ['vscode', 'better-sqlite3'],
     logLevel: 'silent',
-    plugins: [
-      {
-        name: 'alias-better-sqlite3',
-        setup(build) {
-          build.onResolve({ filter: /^better-sqlite3$/ }, () => ({
-            external: true,
-          }));
-        },
-      },
-    ],
   });
 
   if (watch) {
