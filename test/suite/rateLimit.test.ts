@@ -47,7 +47,7 @@ suite('RateLimiter', () => {
     assert.strictEqual(limiter.remaining(), 4);
   });
 
-  test('tokens do not refill before interval elapses', () => {
+  test('tokens do not refill when elapsed time yields less than 1 token', () => {
     const limiter = new RateLimiter(3);
     // Exhaust all tokens
     limiter.tryConsume();
@@ -55,8 +55,9 @@ suite('RateLimiter', () => {
     limiter.tryConsume();
     assert.strictEqual(limiter.remaining(), 0);
 
-    // Set lastRefill to just under 1 hour ago (should NOT trigger refill)
-    (limiter as any).lastRefill = Date.now() - 3600 * 1000 + 5000;
+    // Set lastRefill to a very short time ago — not enough for even 1 token
+    // With 3 tokens/hour, need > 1200s (20 min) for 1 token. Use 10s elapsed.
+    (limiter as any).lastRefill = Date.now() - 10_000;
 
     assert.strictEqual(limiter.remaining(), 0);
     assert.strictEqual(limiter.tryConsume(), false);

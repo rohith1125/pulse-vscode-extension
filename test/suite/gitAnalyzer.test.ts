@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { parseGitHubRemoteUrl } from '../../src/data/githubClient';
 
 // We test parseGitHubRemoteUrl which has no external deps
-suite('GitHubClient - parseRemoteUrl', () => {
+suite('Git Analyzer - Remote URL Parsing', () => {
   test('parses HTTPS remote URL', () => {
     const result = parseGitHubRemoteUrl('https://github.com/owner/repo.git');
     assert.deepStrictEqual(result, { owner: 'owner', repo: 'repo' });

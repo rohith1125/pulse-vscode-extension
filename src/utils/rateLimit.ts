@@ -17,6 +17,9 @@ export class RateLimiter {
     this.refillIntervalMs = 3600 * 1000; // 1 hour
   }
 
+  // Safe without mutex: tryConsume is synchronous — no await between
+  // the tokens check and decrement. JS single-threaded event loop
+  // guarantees no interleaving within synchronous code.
   /** Returns true if a token is available and consumes it. Returns false if rate limited. */
   tryConsume(): boolean {
     this.refill();
@@ -51,8 +54,10 @@ export class RateLimiter {
   private refill(): void {
     const now = Date.now();
     const elapsed = now - this.lastRefill;
-    if (elapsed >= this.refillIntervalMs) {
-      this.tokens = this.maxTokens;
+    // Continuous drip: add tokens proportional to time elapsed
+    const tokensToAdd = (elapsed / this.refillIntervalMs) * this.maxTokens;
+    if (tokensToAdd >= 1) {
+      this.tokens = Math.min(this.maxTokens, this.tokens + Math.floor(tokensToAdd));
       this.lastRefill = now;
     }
   }
