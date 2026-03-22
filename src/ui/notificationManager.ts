@@ -25,4 +25,24 @@ export class NotificationManager {
 
     this.lastCriticalCount = criticalCount;
   }
+
+  showScanComplete(fileCount: number): void {
+    vscode.window.showInformationMessage(`Pulse: Scan complete ✓ (${fileCount} files processed)`);
+  }
+
+  showScanError(error: Error): void {
+    vscode.window.showErrorMessage(`Pulse: Scan failed — ${error.message}`);
+  }
+
+  showScanAlreadyRunning(): void {
+    vscode.window.showInformationMessage('Pulse: Scan already in progress, skipping');
+  }
+
+  showNoWorkspace(): void {
+    vscode.window.showInformationMessage('Pulse: Open a folder to use Pulse');
+  }
+
+  showGitHubConnected(username: string): void {
+    vscode.window.showInformationMessage(`Pulse: Connected as @${username}`);
+  }
 }
