@@ -80,7 +80,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }),
 
       vscode.commands.registerCommand('pulse.openDashboard', () =>
-        openDashboardCommand(knowledgeGraph)
+        openDashboardCommand(knowledgeGraph, context.extensionUri)
       ),
 
       vscode.commands.registerCommand('pulse.askTeam', () =>

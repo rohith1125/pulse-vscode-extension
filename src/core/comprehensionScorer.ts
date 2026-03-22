@@ -1,5 +1,6 @@
 import { PulseDatabase } from '../data/database';
 import { logger } from '../utils/logger';
+import { computeDecay } from './decayCalculator';
 import {
   SCORE_WEIGHT_COMMITS,
   SCORE_WEIGHT_BLAME,
@@ -14,6 +15,7 @@ export interface ScoredContributor {
   blameLines: number;
   reviewCount: number;
   lastEngagement: number | null; // unix timestamp
+  decayWarning: boolean;
 }
 
 /**
@@ -67,14 +69,18 @@ export function computeFileExpertise(
   // Normalize so max score = 1.0
   const maxScore = Math.max(...scored.map(s => s.rawScore), 1e-10);
   return scored
-    .map(s => ({
-      contributorId: s.contributorId,
-      score: s.rawScore / maxScore,
-      commitCount: s.commitCount,
-      blameLines: s.blameLines,
-      reviewCount: s.reviewCount,
-      lastEngagement: s.lastEngagement,
-    }))
+    .map(s => {
+      const decay = computeDecay(s.lastEngagement, decayHalfLifeMonths, fileId, s.contributorId);
+      return {
+        contributorId: s.contributorId,
+        score: s.rawScore / maxScore,
+        commitCount: s.commitCount,
+        blameLines: s.blameLines,
+        reviewCount: s.reviewCount,
+        lastEngagement: s.lastEngagement,
+        decayWarning: decay.isDecayed,
+      };
+    })
     .sort((a, b) => b.score - a.score);
 }
 

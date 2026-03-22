@@ -4,6 +4,13 @@ import { getSettings } from '../config/settings';
 import { logger } from '../utils/logger';
 
 export async function scanRepositoryCommand(scanner: RepoScanner): Promise<void> {
+  // TODO: Add concurrent scan guard once RepoScanner.isScanning is exposed via a public getter
+  // (isScanning is currently private — another agent is working on repoScanner.ts)
+  // if (scanner.isScanning) {
+  //   vscode.window.showInformationMessage('Pulse: Scan already in progress');
+  //   return;
+  // }
+
   await vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Notification,

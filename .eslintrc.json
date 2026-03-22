@@ -6,6 +6,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
+  "extends": ["plugin:@typescript-eslint/recommended"],
   "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/naming-convention": ["warn", { "selector": "variable", "format": ["camelCase", "UPPER_CASE"] }],

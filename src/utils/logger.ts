@@ -18,8 +18,18 @@ export const logger = {
     getChannel().appendLine(`[WARN] ${new Date().toISOString()} ${message}`);
   },
   error(message: string, error?: unknown): void {
-    const errStr = error instanceof Error ? ` — ${error.message}` : error ? ` — ${String(error)}` : '';
-    getChannel().appendLine(`[ERROR] ${new Date().toISOString()} ${message}${errStr}`);
+    const channel = getChannel();
+    const timestamp = new Date().toISOString();
+    if (error instanceof Error) {
+      channel.appendLine(`[ERROR] ${timestamp} ${message}: ${error.message}`);
+      if (error.stack) {
+        channel.appendLine(error.stack);
+      }
+    } else if (error) {
+      channel.appendLine(`[ERROR] ${timestamp} ${message} — ${String(error)}`);
+    } else {
+      channel.appendLine(`[ERROR] ${timestamp} ${message}`);
+    }
   },
   debug(message: string): void {
     getChannel().appendLine(`[DEBUG] ${new Date().toISOString()} ${message}`);

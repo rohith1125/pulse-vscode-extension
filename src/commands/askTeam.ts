@@ -6,6 +6,7 @@ import { resolveSymbolAtPosition } from '../utils/symbolResolver';
 import { logger } from '../utils/logger';
 
 export async function askTeamCommand(knowledgeGraph: KnowledgeGraph): Promise<void> {
+  try {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     vscode.window.showInformationMessage('Pulse: Open a file to use Ask Team');
@@ -82,6 +83,9 @@ export async function askTeamCommand(knowledgeGraph: KnowledgeGraph): Promise<vo
         vscode.Uri.parse(`https://github.com/${expert.contributor.githubLogin}`)
       );
     }
+  }
+  } catch (err) {
+    vscode.window.showErrorMessage(`Pulse: Ask Team failed — ${err instanceof Error ? err.message : String(err)}`);
   }
 }
 

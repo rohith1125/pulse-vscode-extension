@@ -25,7 +25,7 @@ export class DashboardPanel {
     this.render();
   }
 
-  static createOrShow(knowledgeGraph: KnowledgeGraph, extensionUri?: vscode.Uri): void {
+  static createOrShow(knowledgeGraph: KnowledgeGraph, extensionUri: vscode.Uri): void {
     const column = vscode.window.activeTextEditor
       ? vscode.ViewColumn.Beside
       : vscode.ViewColumn.One;
@@ -43,16 +43,14 @@ export class DashboardPanel {
       {
         enableScripts: true,
         retainContextWhenHidden: true,
-        localResourceRoots: extensionUri
-          ? [vscode.Uri.joinPath(extensionUri, 'media')]
-          : [],
+        localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')],
       }
     );
 
     DashboardPanel.instance = new DashboardPanel(
       panel,
       knowledgeGraph,
-      extensionUri ?? vscode.Uri.file('')
+      extensionUri
     );
   }
 

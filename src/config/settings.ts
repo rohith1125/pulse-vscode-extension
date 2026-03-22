@@ -16,7 +16,7 @@ export interface PulseSettings {
 
 export function getSettings(): PulseSettings {
   const cfg = vscode.workspace.getConfiguration('pulse');
-  return {
+  const settings: PulseSettings = {
     enabled: cfg.get<boolean>('enabled', true),
     codeLensEnabled: cfg.get<boolean>('codeLensEnabled', true),
     hoverEnabled: cfg.get<boolean>('hoverEnabled', true),
@@ -24,9 +24,15 @@ export function getSettings(): PulseSettings {
     busFactorCriticalThreshold: cfg.get<number>('busFactorCriticalThreshold', 1),
     decayHalfLifeMonths: cfg.get<number>('decayHalfLifeMonths', 6),
     autoScanIntervalMinutes: cfg.get<number>('autoScanIntervalMinutes', 30),
-    excludePatterns: cfg.get<string[]>('excludePatterns', ['**/node_modules/**', '**/dist/**', '**/.git/**']),
+    excludePatterns: cfg.get<string[]>('excludePatterns', ['**/node_modules/**', '**/dist/**', '**/.git/**', '**/out/**']),
     githubEnabled: cfg.get<boolean>('githubEnabled', false),
     maxFileSizeKb: cfg.get<number>('maxFileSizeKb', 500),
     hoverDelayMs: cfg.get<number>('hoverDelayMs', 300),
   };
+
+  if (settings.busFactorCriticalThreshold >= settings.busFactorWarningThreshold) {
+    settings.busFactorCriticalThreshold = Math.max(0, settings.busFactorWarningThreshold - 1);
+  }
+
+  return settings;
 }

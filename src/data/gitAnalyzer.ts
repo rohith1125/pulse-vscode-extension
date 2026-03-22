@@ -252,7 +252,7 @@ function parsePorcelainBlame(output: string): BlameSegment[] {
  * Uses git shortlog.
  */
 export async function getAllContributors(repoRoot: string): Promise<RawContributor[]> {
-  const output = await git(['shortlog', '-sne', '--all', 'HEAD'], repoRoot);
+  const output = await git(['shortlog', '-sne', 'HEAD'], repoRoot);
   if (!output.trim()) { return []; }
 
   return output

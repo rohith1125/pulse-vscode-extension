@@ -41,6 +41,7 @@ export interface RepoPRData {
  *   git@github.com:owner/repo.git
  */
 export function parseGitHubRemoteUrl(remoteUrl: string): { owner: string; repo: string } | null {
+  if (!remoteUrl) return null;
   // HTTPS format
   const httpsMatch = remoteUrl.match(/https?:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?(?:\/.*)?$/);
   if (httpsMatch) {
@@ -169,8 +170,14 @@ export class GitHubClient {
           });
         }
       }
-    } catch (err) {
-      logger.error(`Failed to fetch PR data for ${filePath}`, err);
+    } catch (err: any) {
+      if (err?.status === 401) {
+        logger.warn(`GitHub auth expired for ${filePath} — re-authenticate with Pulse: Connect GitHub`);
+      } else if (err?.status === 404) {
+        logger.warn(`GitHub repo not found for ${filePath} — check remote URL`);
+      } else {
+        logger.error(`Failed to fetch PR data for ${filePath}`, err);
+      }
     }
 
     return { reviews, comments };

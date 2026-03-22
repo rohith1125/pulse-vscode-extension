@@ -76,6 +76,9 @@ export interface DashboardData {
 
 // ─── KnowledgeGraph ───────────────────────────────────────────────────────────
 
+// NOTE: All public methods that accept filePath assume callers pass workspace-relative paths.
+// All current callers (hoverProvider, codeLensProvider, askTeam) normalise via toRelativePath()
+// before calling into this class. If a new caller is added, ensure it does the same.
 export class KnowledgeGraph {
   constructor(private db: PulseDatabase) {}
 

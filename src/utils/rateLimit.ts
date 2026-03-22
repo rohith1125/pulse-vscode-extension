@@ -7,6 +7,8 @@ export class RateLimiter {
   private lastRefill: number;
   private readonly maxTokens: number;
   private readonly refillIntervalMs: number;
+  private waitingCount = 0;
+  private readonly maxWaiters = 50;
 
   constructor(maxTokensPerHour: number) {
     this.maxTokens = maxTokensPerHour;
@@ -27,8 +29,16 @@ export class RateLimiter {
 
   /** Waits until a token is available, then consumes it. */
   async consume(): Promise<void> {
-    while (!this.tryConsume()) {
-      await delay(1000);
+    if (this.waitingCount >= this.maxWaiters) {
+      throw new Error('Rate limiter queue full — too many concurrent requests');
+    }
+    this.waitingCount++;
+    try {
+      while (!this.tryConsume()) {
+        await delay(1000);
+      }
+    } finally {
+      this.waitingCount--;
     }
   }
 
