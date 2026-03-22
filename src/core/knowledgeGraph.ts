@@ -53,11 +53,11 @@ export interface DecisionNote {
 export interface HoverContext {
   filePath: string;
   lineNumber: number;
-  symbolName: string | undefined;
+  symbolName?: string;
   topExperts: ExpertiseResult[];
   busFactorResult: BusFactorResult | null;
   recentPRs: PullRequestContext[];
-  decisionNotes: DecisionNote[];
+  decisionNotes: string[];
 }
 
 export interface DashboardData {
@@ -117,15 +117,12 @@ export class KnowledgeGraph {
     }));
 
     const commentRows = this.db.getPRCommentsNearLine(file.id, lineNumber, HOVER_CONTEXT_LINES);
-    const decisionNotes: DecisionNote[] = commentRows
+    const decisionNotes: string[] = commentRows
       .slice(0, MAX_DECISION_NOTES)
-      .map(c => ({
-        prNumber: c.prNumber,
-        prTitle: c.prTitle,
-        prUrl: c.prUrl,
-        authorLogin: c.authorLogin,
-        excerpt: c.body.length > 120 ? c.body.slice(0, 117) + '...' : c.body,
-      }));
+      .map(c => {
+        const excerpt = c.body.length > 120 ? c.body.slice(0, 117) + '...' : c.body;
+        return `${c.authorLogin ?? 'unknown'}: ${excerpt} (PR #${c.prNumber})`;
+      });
 
     return { filePath, lineNumber, symbolName, topExperts, busFactorResult, recentPRs, decisionNotes };
   }
@@ -166,7 +163,8 @@ export class KnowledgeGraph {
   /**
    * Returns dashboard data.
    */
-  getDashboardData(): DashboardData {
+  getDashboardData(settings?: Pick<PulseSettings, 'decayHalfLifeMonths'>): DashboardData {
+    const effectiveSettings = settings ?? { decayHalfLifeMonths: 6 };
     const allFiles = this.db.getAllFiles();
     const allContributors = this.db.getAllContributors();
     const allBusFactors = this.db.getCriticalFiles(100);
@@ -174,16 +172,13 @@ export class KnowledgeGraph {
 
     const criticalFiles = allBusFactors
       .filter(bf => bf.riskLevel === 'critical')
-      .map(bf => {
-        const row = this.db.getBusFactorForFile(bf.fileId)!;
-        return {
-          fileId: bf.fileId,
-          filePath: bf.filePath,
-          busFactorCount: bf.busFactorCount,
-          riskLevel: bf.riskLevel as 'critical' | 'warning' | 'healthy',
-          topExperts: [],
-        };
-      });
+      .map(bf => ({
+        fileId: bf.fileId,
+        filePath: bf.filePath,
+        busFactorCount: bf.busFactorCount,
+        riskLevel: bf.riskLevel as 'critical' | 'warning' | 'healthy',
+        topExperts: this.getTopExpertsForFile(bf.filePath, effectiveSettings as PulseSettings, 3),
+      }));
 
     const warningFiles = allBusFactors
       .filter(bf => bf.riskLevel === 'warning')
@@ -192,7 +187,7 @@ export class KnowledgeGraph {
         filePath: bf.filePath,
         busFactorCount: bf.busFactorCount,
         riskLevel: bf.riskLevel as 'critical' | 'warning' | 'healthy',
-        topExperts: [],
+        topExperts: this.getTopExpertsForFile(bf.filePath, effectiveSettings as PulseSettings, 3),
       }));
 
     // Knowledge distribution: count files where each contributor has highest score
