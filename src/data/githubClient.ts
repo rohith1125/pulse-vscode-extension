@@ -162,7 +162,7 @@ export class GitHubClient {
             prTitle: pr.title,
             prUrl: pr.html_url,
             authorLogin: comment.user.login,
-            body: comment.body,
+            body: comment.body ?? '',
             filePath: null,
             line: null,
             createdAt: Math.floor(new Date(comment.created_at).getTime() / 1000),

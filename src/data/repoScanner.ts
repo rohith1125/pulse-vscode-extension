@@ -264,7 +264,7 @@ export class RepoScanner {
           prUrl: comment.prUrl,
           authorLogin: comment.authorLogin,
           body: comment.body,
-          commentPath: comment.filePath,
+          commentPath: comment.filePath ?? undefined,
           line: comment.line ?? undefined,
           createdAt: comment.createdAt,
         });

@@ -29,7 +29,7 @@ export function computeDecay(
   const decayFactor = computeRecencyBoost(lastEngagementTimestamp, now, decayHalfLifeMonths);
   const isDecayed = monthsSince > decayHalfLifeMonths;
 
-  return { fileId, contributorId, monthsSince, decayFactor, isDecayed };
+  return { fileId, contributorId, monthsSinceEngagement: monthsSince, decayFactor, isDecayed };
 }
 
 /**
