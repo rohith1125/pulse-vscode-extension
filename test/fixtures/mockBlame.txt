@@ -1,4 +1,4 @@
-abc1234567890abcdef1234567890abcdef12345678 1 1 5
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 1 1 5
 author Alice Chen
 author-mail <alice@example.com>
 author-time 1704067200
@@ -7,10 +7,46 @@ committer Alice Chen
 committer-mail <alice@example.com>
 committer-time 1704067200
 committer-tz +0000
-summary feat: add authentication
+summary feat: initial auth implementation
+filename src/auth/login.ts
+	import { Session } from './session';
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 2 2
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1704067200
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1704067200
+committer-tz +0000
+summary feat: initial auth implementation
+filename src/auth/login.ts
+	import { validateToken } from './tokens';
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 3 3
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1704067200
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1704067200
+committer-tz +0000
+summary feat: initial auth implementation
+filename src/auth/login.ts
+
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 4 4
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1704067200
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1704067200
+committer-tz +0000
+summary feat: initial auth implementation
 filename src/auth/login.ts
 	export function login(user: string) {
-abc1234567890abcdef1234567890abcdef12345678 2 2
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 5 5
 author Alice Chen
 author-mail <alice@example.com>
 author-time 1704067200
@@ -19,42 +55,222 @@ committer Alice Chen
 committer-mail <alice@example.com>
 committer-time 1704067200
 committer-tz +0000
-summary feat: add authentication
+summary feat: initial auth implementation
 filename src/auth/login.ts
 	  return doLogin(user);
-abc1234567890abcdef1234567890abcdef12345678 3 3
+b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 6 6 4
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1706745600
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1706745600
+committer-tz +0000
+summary fix: resolve session timeout bug
+filename src/auth/login.ts
+	}
+b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 7 7
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1706745600
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1706745600
+committer-tz +0000
+summary fix: resolve session timeout bug
+filename src/auth/login.ts
+
+b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 8 8
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1706745600
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1706745600
+committer-tz +0000
+summary fix: resolve session timeout bug
+filename src/auth/login.ts
+	export function logout() {
+b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 9 9
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1706745600
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1706745600
+committer-tz +0000
+summary fix: resolve session timeout bug
+filename src/auth/login.ts
+	  clearSession();
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 10 10 6
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1709251200
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1709251200
+committer-tz +0000
+summary feat: add OAuth2 provider support
+filename src/auth/login.ts
+	}
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 11 11
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1709251200
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1709251200
+committer-tz +0000
+summary feat: add OAuth2 provider support
+filename src/auth/login.ts
+
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 12 12
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1709251200
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1709251200
+committer-tz +0000
+summary feat: add OAuth2 provider support
+filename src/auth/login.ts
+	export async function authenticateOAuth(provider: string) {
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 13 13
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1709251200
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1709251200
+committer-tz +0000
+summary feat: add OAuth2 provider support
+filename src/auth/login.ts
+	  const token = await getOAuthToken(provider);
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 14 14
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1709251200
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1709251200
+committer-tz +0000
+summary feat: add OAuth2 provider support
+filename src/auth/login.ts
+	  return validateToken(token);
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 15 15
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1709251200
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1709251200
+committer-tz +0000
+summary feat: add OAuth2 provider support
+filename src/auth/login.ts
+	}
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 16 16 3
 author Alice Chen
 author-mail <alice@example.com>
-author-time 1704067200
+author-time 1711929600
 author-tz +0000
 committer Alice Chen
 committer-mail <alice@example.com>
-committer-time 1704067200
+committer-time 1711929600
 committer-tz +0000
-summary feat: add authentication
+summary refactor: extract token validation logic
+filename src/auth/login.ts
+
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 17 17
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1711929600
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1711929600
+committer-tz +0000
+summary refactor: extract token validation logic
+filename src/auth/login.ts
+	export function refreshSession(token: string) {
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 18 18
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1711929600
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1711929600
+committer-tz +0000
+summary refactor: extract token validation logic
+filename src/auth/login.ts
+	  return validateAndRefresh(token);
+b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 19 19 2
+author Bob Smith
+author-mail <bob@example.com>
+author-time 1714521600
+author-tz +0000
+committer Bob Smith
+committer-mail <bob@example.com>
+committer-time 1714521600
+committer-tz +0000
+summary fix: handle expired refresh tokens gracefully
 filename src/auth/login.ts
 	}
-def2345678901234567890abcdef1234567890abcd 4 4 2
+b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 20 20
 author Bob Smith
 author-mail <bob@example.com>
-author-time 1703980800
+author-time 1714521600
 author-tz +0000
 committer Bob Smith
 committer-mail <bob@example.com>
-committer-time 1703980800
+committer-time 1714521600
 committer-tz +0000
-summary fix: resolve login bug
+summary fix: handle expired refresh tokens gracefully
 filename src/auth/login.ts
-	export function logout() {
-def2345678901234567890abcdef1234567890abcd 5 5
-author Bob Smith
-author-mail <bob@example.com>
-author-time 1703980800
+
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 21 21 2
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1717200000
 author-tz +0000
-committer Bob Smith
-committer-mail <bob@example.com>
-committer-time 1703980800
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1717200000
 committer-tz +0000
-summary fix: resolve login bug
+summary feat: add rate limiting to auth endpoints
 filename src/auth/login.ts
-	  clearSession();
+	export function checkRateLimit(userId: string) {
+c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 22 22
+author Carol Davis
+author-mail <carol@example.com>
+author-time 1717200000
+author-tz +0000
+committer Carol Davis
+committer-mail <carol@example.com>
+committer-time 1717200000
+committer-tz +0000
+summary feat: add rate limiting to auth endpoints
+filename src/auth/login.ts
+	  return limiter.check(userId);
+a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 23 23 1
+author Alice Chen
+author-mail <alice@example.com>
+author-time 1727740800
+author-tz +0000
+committer Alice Chen
+committer-mail <alice@example.com>
+committer-time 1727740800
+committer-tz +0000
+summary feat: implement multi-factor authentication
+filename src/auth/login.ts
+	}

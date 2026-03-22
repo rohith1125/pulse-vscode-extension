@@ -27,4 +27,38 @@ suite('RateLimiter', () => {
     }
     assert.strictEqual(limiter.remaining(), 40);
   });
+
+  test('tokens refill after interval elapses', () => {
+    const limiter = new RateLimiter(5);
+    // Exhaust all tokens
+    for (let i = 0; i < 5; i++) {
+      assert.strictEqual(limiter.tryConsume(), true);
+    }
+    assert.strictEqual(limiter.tryConsume(), false);
+    assert.strictEqual(limiter.remaining(), 0);
+
+    // Simulate time passing beyond the 1-hour refill interval
+    // Access private lastRefill via bracket notation to force refill
+    (limiter as any).lastRefill = Date.now() - 3600 * 1000 - 1;
+
+    // After refill interval, tokens should be restored
+    assert.strictEqual(limiter.remaining(), 5);
+    assert.strictEqual(limiter.tryConsume(), true);
+    assert.strictEqual(limiter.remaining(), 4);
+  });
+
+  test('tokens do not refill before interval elapses', () => {
+    const limiter = new RateLimiter(3);
+    // Exhaust all tokens
+    limiter.tryConsume();
+    limiter.tryConsume();
+    limiter.tryConsume();
+    assert.strictEqual(limiter.remaining(), 0);
+
+    // Set lastRefill to just under 1 hour ago (should NOT trigger refill)
+    (limiter as any).lastRefill = Date.now() - 3600 * 1000 + 5000;
+
+    assert.strictEqual(limiter.remaining(), 0);
+    assert.strictEqual(limiter.tryConsume(), false);
+  });
 });
