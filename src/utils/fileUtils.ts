@@ -61,6 +61,38 @@ export function isExcluded(relativePath: string, excludePatterns: string[]): boo
   });
 }
 
+const BINARY_EXTENSIONS = new Set([
+  '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico', '.svg',
+  '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+  '.zip', '.tar', '.gz', '.rar', '.7z',
+  '.exe', '.dll', '.so', '.dylib', '.bin',
+  '.woff', '.woff2', '.ttf', '.eot', '.otf',
+  '.mp3', '.mp4', '.avi', '.mov', '.wav',
+  '.pyc', '.class', '.o', '.obj',
+  '.sqlite', '.db',
+]);
+
+export function isBinaryFile(filePath: string): boolean {
+  const ext = path.extname(filePath).toLowerCase();
+  return BINARY_EXTENSIONS.has(ext);
+}
+
+export function addPulseDbToGitignore(workspaceRoot: string): void {
+  const gitignorePath = path.join(workspaceRoot, '.gitignore');
+  const entry = '.vscode/pulse.db';
+  try {
+    if (fs.existsSync(gitignorePath)) {
+      const content = fs.readFileSync(gitignorePath, 'utf-8');
+      if (content.includes(entry)) return;
+      fs.appendFileSync(gitignorePath, `\n${entry}\n`);
+    } else {
+      fs.writeFileSync(gitignorePath, `${entry}\n`);
+    }
+  } catch {
+    // Non-critical — don't crash if .gitignore can't be written
+  }
+}
+
 /** Detects the programming language of a file by extension */
 export function detectLanguage(filePath: string): string {
   const ext = path.extname(filePath).toLowerCase();

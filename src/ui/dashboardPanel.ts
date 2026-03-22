@@ -88,14 +88,20 @@ export class DashboardPanel {
 
     const criticalRows = data.criticalFiles
       .slice(0, 20)
-      .map(f => `
+      .map(f => {
+        const lastActive = f.topExperts[0]?.lastEngagement
+          ? new Date(f.topExperts[0].lastEngagement).toLocaleDateString()
+          : 'Unknown';
+        return `
         <tr>
           <td class="file-path">${escapeHtml(f.filePath)}</td>
           <td class="center"><span class="badge critical">${f.busFactorCount}</span></td>
           <td>${escapeHtml(f.topExperts[0]?.contributor.name ?? '—')}</td>
+          <td>${escapeHtml(lastActive)}</td>
           <td class="center"><button class="ask-btn" onclick="askTeam()">Ask →</button></td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
 
     const warningRows = data.warningFiles
       .slice(0, 20)
@@ -109,15 +115,18 @@ export class DashboardPanel {
       `).join('');
 
     const distributionBars = data.knowledgeDistribution
-      .map(d => `
+      .map(d => {
+        const safeWidth = Math.max(0, Math.min(100, Number(d.percentage) || 0));
+        return `
         <div class="dist-row">
           <span class="dist-name">${escapeHtml(d.contributorName)}</span>
           <div class="dist-bar-wrap">
-            <div class="dist-bar" style="width:${d.percentage}%"></div>
+            <div class="dist-bar" style="width:${safeWidth}%"></div>
           </div>
-          <span class="dist-pct">${d.percentage}% (${d.fileCount} files)</span>
+          <span class="dist-pct">${safeWidth}% (${d.fileCount} files)</span>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -186,7 +195,7 @@ export class DashboardPanel {
   ${data.criticalFiles.length > 0 ? `
   <h2>⚠️ Critical Files — Act Now</h2>
   <table>
-    <tr><th>File</th><th>Bus Factor</th><th>Top Expert</th><th></th></tr>
+    <tr><th>File</th><th>Bus Factor</th><th>Top Expert</th><th>Last Active</th><th></th></tr>
     ${criticalRows}
   </table>` : ''}
 

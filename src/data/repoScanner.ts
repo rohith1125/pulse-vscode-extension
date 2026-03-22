@@ -12,7 +12,7 @@ import { getGitHubSession } from '../auth/githubAuth';
 import { computeFileExpertise, saveExpertiseScores } from '../core/comprehensionScorer';
 import { computeAndSaveAllBusFactors } from '../core/busFactorCalculator';
 import { PulseSettings } from '../config/settings';
-import { getWorkspaceRoot, isExcluded, detectLanguage, isFileTooLarge, toAbsolutePath } from '../utils/fileUtils';
+import { getWorkspaceRoot, isExcluded, detectLanguage, isFileTooLarge, toAbsolutePath, isBinaryFile, addPulseDbToGitignore } from '../utils/fileUtils';
 import { logger } from '../utils/logger';
 import {
   SCAN_BATCH_SIZE, MAX_FILES_PER_SCAN, INCREMENTAL_SCAN_DEBOUNCE_MS,
@@ -50,6 +50,8 @@ export class RepoScanner {
       throw new Error('Workspace is not a git repository');
     }
 
+    addPulseDbToGitignore(repoRoot);
+
     this.isScanning = true;
     this.db.setScanStatus('running');
 
@@ -66,6 +68,9 @@ export class RepoScanner {
       // 2. Get tracked files
       let trackedFiles = await getTrackedFiles(repoRoot);
       trackedFiles = trackedFiles.filter(f => !isExcluded(f, settings.excludePatterns));
+
+      // Filter binary files
+      trackedFiles = trackedFiles.filter(f => !isBinaryFile(f));
 
       // Filter by size
       trackedFiles = trackedFiles.filter(f => {
@@ -133,6 +138,11 @@ export class RepoScanner {
     try {
       const language = detectLanguage(relPath);
       const absPath = path.join(repoRoot, relPath);
+
+      if (!absPath.startsWith(repoRoot + path.sep) && absPath !== repoRoot) {
+        logger.warn(`Skipping file outside workspace: ${relPath}`);
+        return;
+      }
 
       // Count lines
       let lineCount: number | undefined;
