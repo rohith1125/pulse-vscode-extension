@@ -33,7 +33,7 @@ committer-time 1704067200
 committer-tz +0000
 summary feat: initial auth implementation
 filename src/auth/login.ts
-
+	
 a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 4 4
 author Alice Chen
 author-mail <alice@example.com>
@@ -81,7 +81,7 @@ committer-time 1706745600
 committer-tz +0000
 summary fix: resolve session timeout bug
 filename src/auth/login.ts
-
+	
 b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3 8 8
 author Bob Smith
 author-mail <bob@example.com>
@@ -129,7 +129,7 @@ committer-time 1709251200
 committer-tz +0000
 summary feat: add OAuth2 provider support
 filename src/auth/login.ts
-
+	
 c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 12 12
 author Carol Davis
 author-mail <carol@example.com>
@@ -189,7 +189,7 @@ committer-time 1711929600
 committer-tz +0000
 summary refactor: extract token validation logic
 filename src/auth/login.ts
-
+	
 a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2 17 17
 author Alice Chen
 author-mail <alice@example.com>
@@ -237,7 +237,7 @@ committer-time 1714521600
 committer-tz +0000
 summary fix: handle expired refresh tokens gracefully
 filename src/auth/login.ts
-
+	
 c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4 21 21 2
 author Carol Davis
 author-mail <carol@example.com>
